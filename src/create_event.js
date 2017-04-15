@@ -1,8 +1,17 @@
-import { defaults, eventGroupByType, initialisersByGroup, initialiserParams } from './maps.js';
+import maps from './maps.js';
 import extendWithKeyboardParams from './utils/extendWithKeyboardParams.js';
 
+// NOTE(lbayes): This is some unpleasant global state, but
+let resolvedMaps = null;
+// import { defaults, eventGroupByType, initialisersByGroup, initialiserParams } from './maps.js';
+
 function createEvent ( window, type, params = {} ) {
-	let group = eventGroupByType[ type ];
+
+	if (!resolvedMaps) {
+		resolvedMaps = maps(window);
+	}
+
+	let group = resolvedMaps.eventGroupByType[ type ];
 	let isKeyboardEvent;
 
 	if ( group === 'KeyboardEvent' ) {
@@ -10,9 +19,9 @@ function createEvent ( window, type, params = {} ) {
 		isKeyboardEvent = true;
 	}
 
-	const initialiser = ( initialisersByGroup[ group ] || initialisersByGroup.Event );
+	const initialiser = ( resolvedMaps.initialisersByGroup[ group ] || resolvedMaps.initialisersByGroup.Event );
 
-	const Constructor = initialiser[0] || window.Event;
+	const Constructor = initialiser[0];
 	const method = initialiser[1];
 
 	let extendedParams = {
@@ -20,12 +29,12 @@ function createEvent ( window, type, params = {} ) {
 		cancelable: true
 	};
 
-	const paramsList = initialiserParams[ method ];
+	const paramsList = resolvedMaps.initialiserParams[ method ];
 	let i = ( paramsList ? paramsList.length : 0 );
 
 	while ( i-- ) {
 		const paramName = paramsList[i];
-		extendedParams[ paramName ] = ( paramName in params ? params[ paramName ] : defaults[ paramName ] );
+		extendedParams[ paramName ] = paramName in params ? params[ paramName ] : resolvedMaps.defaults[paramName];
 	}
 
 	let event = new Constructor( type, extendedParams );

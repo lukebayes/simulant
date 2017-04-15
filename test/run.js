@@ -1,4 +1,6 @@
 /*global require, __dirname */
+
+/*
 var path = require( 'path' );
 var chalk = require( 'chalk' );
 var Nightmare = require( 'nightmare' );
@@ -53,3 +55,4 @@ nightmare
 		console.log( '...tests completed' );
 		process.exit( errored ? 1 : 0 );
 	});
+*/
