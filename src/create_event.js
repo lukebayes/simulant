@@ -1,7 +1,7 @@
 import { defaults, eventGroupByType, initialisersByGroup, initialiserParams } from './maps.js';
 import extendWithKeyboardParams from './utils/extendWithKeyboardParams.js';
 
-function modern ( window, type, params = {} ) {
+function createEvent ( window, type, params = {} ) {
   let group = eventGroupByType[ type ];
   let isKeyboardEvent;
 
@@ -37,6 +37,6 @@ function modern ( window, type, params = {} ) {
   return event;
 }
 
-modern.mode = 'modern';
+createEvent.mode = 'modern';
 
-export default modern;
+export default createEvent;

@@ -1,6 +1,12 @@
-# simulant.js
+# jsdom-simulant
 
-**Simulated DOM events for automated testing**
+**Simulated DOM events for automated testing of JSDOM elements**
+
+This is a fork of [simulant.js](https://github.com/Rich-Harris/simulant) that has been modified so that it does not have load-time global dependencies.
+
+In this fork, the function entry point requires a reference to the window object if it's called directly. Otherwise, the fire method will find the window and document that are referenced by element.ownerDocument and element.ownerDocument.defaultView.
+
+This is how we instantiate and provide a new window for every single test method.
 
 ## What's this for?
 
@@ -8,78 +14,44 @@ Sometimes you need to create fake DOM events so that you can test the parts of y
 
 ```js
 // WITHOUT SIMULANT.JS
-try {
-  // DOM Level 3
-  event = new MouseEvent( 'mousemove', {
-    bubbles: true,
-    cancelable: true,
-    relatedTarget: previousNode
-  });
+event = new MouseEvent('mousemove', {
+  bubbles: true,
+  cancelable: true,
+  relatedTarget: previousNode
+});
 
-  node.dispatchEvent( event );
-}
-
-catch ( err ) {
-  if ( document.createEvent ) {
-    // DOM Level 2
-    event = document.createEvent( 'MouseEvents' );
-    event.initMouseEvent( 'mousemove', true, true, window, null, 0, 0, 0, 0, '', false, false, false, false, 0, previousNode );
-
-    node.dispatchEvent( event );
-  }
-
-  else {
-    // IE8 and below
-    event = document.createEventObject();
-    event.relatedTarget = previousNode;
-
-    node.fireEvent( 'onmousemove', event );
-  }
-}
-
+element.dispatchEvent(event);
 
 // WITH SIMULANT.JS
-simulant.fire( node, 'mousemove', { relatedTarget: previousNode });
+simulant.fire(element, 'mousemove', {relatedTarget: previousNode});
 ```
 
-Simulant was created to make automated testing of [Ractive.js](https://github.com/ractivejs/ractive) across different browsers easier.
-
-
-## Why not just use jQuery?
-
-In some cases you can. But events created with `$(element).trigger('click')`, for example, won't trigger handlers bound using `element.addEventListener('click', handler)` in many situations, such as when you're doing automated tests with [PhantomJS](http://phantomjs.org/).
-
-Simulant uses native DOM events, not fake events, so its behaviour is more predictable.
+Simulant was forked to make automated testing of [Nomplate](https://github.com/lukebayes/nomplate) more pleasant.
 
 
 ## Installation
 
 ```bash
-npm install simulant
+npm install jsdom-simulant
 ```
-
 
 ## Usage
 
 ```js
 // Create a simulated event
-event = simulant( 'click' );
+event = simulant(window, 'click');
 
 // Create a simulated event with parameters, e.g. a middle-click
-event = simulant( 'click', { button: 1, which: 2 });
+event = simulant(window, 'click', {button: 1, which: 2});
 
 // Fire a previously created event
-target = document.getElementById( 'target' );
-simulant.fire( target, event );
+element = document.getElementById('some-id');
+simulant.fire(element, event);
 
 // Create an event and fire it immediately
-simulant.fire( target, 'click' );
-simulant.fire( target, 'click', { button: 1, which: 2 });
+simulant.fire(element, 'click');
+simulant.fire(element, 'click', {button: 1, which: 2});
 
-// Polyfill addEventListener in old browsers
-if ( !window.addEventListener ) {
-  simulant.polyfill();
-}
 ```
 
 
@@ -92,7 +64,7 @@ There are exceptions - a click event on a checkbox input will cause a secondary 
 
 ## Building and testing
 
-Simulant uses [jsdom](https://github.com/tmpvar/jsdom) for testing, which requires [io.js](iojs.org) rather than node.js.
+Simulant uses [jsdom](https://github.com/tmpvar/jsdom) for testing.
 
 To build the library, do `npm run build`.
 
@@ -105,3 +77,6 @@ To test the library in browsers, do `npm start`. This will build the library (an
 
 Copyright (c) 2013-16 [Rich Harris](http://rich-harris.co.uk) ([@rich_harris](http://twitter.com/rich_harris)).
 Released under an MIT license.
+
+Forked and updated by Luke Bayes in April of 2017
+
