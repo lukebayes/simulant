@@ -11,7 +11,7 @@
     }
   ],
   "license": "MIT",
-  "repository": "https://github.com/lukebayes/simulant",
+  "repository": "https://github.com/lukebayes/simulant/tree/jsdom",
   "main": "dist/jsdom-simulant.umd.js",
   "jsnext:main": "dist/jsdom-simulant.es.js",
   "scripts": {
