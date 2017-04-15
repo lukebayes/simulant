@@ -1,19 +1,24 @@
 {
-  "name": "simulant",
+  "name": "jsdom-simulant",
   "description": "Simulated DOM events for automated testing",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "author": {
     "name": "Rich Harris"
   },
+  "contributors": [
+    {
+      "name": "Luke Bayes"
+    }
+  ],
   "license": "MIT",
-  "repository": "https://github.com/Rich-Harris/simulant",
-  "main": "dist/simulant.umd.js",
-  "jsnext:main": "dist/simulant.es.js",
+  "repository": "https://github.com/lukebayes/simulant",
+  "main": "dist/jsdom-simulant.umd.js",
+  "jsnext:main": "dist/jsdom-simulant.es.js",
   "scripts": {
     "prepublish": "npm run lint && rm -rf dist && npm test && npm run build:es",
     "build": "npm run build:umd && npm run build:es",
-    "build:umd": "rollup -c -f umd -o dist/simulant.umd.js",
-    "build:es": "rollup -c -f es6 -o dist/simulant.es.js",
+    "build:umd": "rollup -c -f umd -o dist/jsdom-simulant.umd.js",
+    "build:es": "rollup -c -f es6 -o dist/jsdom-simulant.es.js",
     "test": "node test/run.js",
     "pretest": "npm run build:umd",
     "lint": "eslint src"
