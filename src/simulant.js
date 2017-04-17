@@ -4,10 +4,11 @@ function simulant(window, type, params = {}) {
 	return createEvent(window, type, params);
 }
 
-simulant.fire = function(element, typeOrEvent, params) {
-	const event = typeof typeOrEvent === 'string' ? createEvent(element && element.ownerDocument && element.ownerDocument.defaultView, typeOrEvent, params) : typeOrEvent;
+simulant.fire = function(elementOrDocument, typeOrEvent, params) {
+	const windowFromElementOrDocument = elementOrDocument && (elementOrDocument.ownerDocument && elementOrDocument.ownerDocument.defaultView || elementOrDocument.defaultView);
+	const event = typeof typeOrEvent === 'string' ? createEvent(windowFromElementOrDocument, typeOrEvent, params) : typeOrEvent;
 
-	element.dispatchEvent(event);
+	elementOrDocument.dispatchEvent(event);
 	return event;
 };
 

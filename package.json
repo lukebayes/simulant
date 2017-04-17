@@ -1,7 +1,7 @@
 {
   "name": "jsdom-simulant",
   "description": "Simulated DOM events for automated testing",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": {
     "name": "Rich Harris"
   },
